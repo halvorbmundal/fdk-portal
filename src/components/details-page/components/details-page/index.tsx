@@ -9,9 +9,8 @@ import React, {
 } from 'react';
 import { compose } from 'redux';
 import { Link } from 'react-router-dom';
-import FdkLink from '@fellesdatakatalog/link';
 
-import Button from '@fellesdatakatalog/button';
+import FdkLink from '@fellesdatakatalog/link';
 import translations from '../../../../lib/localization';
 import { getTranslateText as translate } from '../../../../lib/translateText';
 
@@ -51,11 +50,7 @@ import withCommunity, {
 } from '../../../with-community';
 import Aside from '../aside';
 import { accessRequestWhiteList } from '../../../../white-list';
-import {
-  EventAction,
-  EventCategory,
-  trackSiteImproveEvent
-} from '../../../analytics-siteimprove/utils';
+import { AccessRequestButton } from './AccessRequestButton';
 
 interface ExternalProps {
   entity: Entity;
@@ -70,6 +65,7 @@ interface ExternalProps {
   isRestrictedData: boolean;
   isNonPublicData: boolean;
   languages?: Language[];
+  accessRequestUrl?: string;
 }
 
 interface Props
@@ -103,6 +99,7 @@ const DetailsPage: FC<PropsWithChildren<Props>> = ({
   languages = [],
   topics,
   multiplePages,
+  accessRequestUrl,
   datasetScoresActions: {
     getDatasetScoresRequested: getDatasetScores,
     resetDatasetScores
@@ -320,27 +317,11 @@ const DetailsPage: FC<PropsWithChildren<Props>> = ({
           {renderThemeItems().length > 0 && (
             <SC.Themes>{renderThemeItems()}</SC.Themes>
           )}
-          {accessRequest && (
-            <SC.AccessRequest>
-              <a
-                href={accessRequest.requestAddress}
-                target='_blank'
-                rel='noreferrer'
-              >
-                <Button
-                  onClick={() =>
-                    trackSiteImproveEvent({
-                      category: EventCategory.DETAILS_PAGE,
-                      action: EventAction.REQUEST_ACCESS,
-                      label: entityId
-                    })
-                  }
-                >
-                  {translations.detailsPage.requestDataButton}
-                </Button>
-              </a>
-            </SC.AccessRequest>
-          )}
+          <AccessRequestButton
+            accessRequest={accessRequest}
+            accessRequestUrl={accessRequestUrl}
+            entityId={entityId}
+          />
         </SC.HeadingLeft>
       </SC.Heading>
       <SC.Page>
