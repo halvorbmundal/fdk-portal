@@ -43,7 +43,7 @@ export function AccessRequestButton({
       <SC.AccessRequest>
         <Button
           onClick={() => {
-            // trackAccessRequest();
+            trackAccessRequest();
             getAppliactionLink(location.pathname).then(url => {
               window.location.href = url;
             });
